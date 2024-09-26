@@ -2,58 +2,64 @@ import argparse, hashlib
 
 def main():
     parser = argparse.ArgumentParser(description = 'open_file')
-    
+
+    parser.add_argument('passwords')
+
     parser.add_argument('dictionary')
 
     args = parser.parse_args()
 
 
 
+    passwords = open(args.passwords, 'r')
+
     wordlistfile = open(args.dictionary, 'r')
+    # passwordsArr = []
 
-    wordlistArr = []
+    for password in passwords.readlines():
 
-    for word in wordlistfile.readlines():
+        #passwordsArr.append(word.strip())
 
-        wordlistArr.append(word.strip())
+        passworD = password.strip().split(':')
 
-    print(wordlistArr)
-
-    wordlistfile.close()
-
-    
-
-    hashwordlistArr = []
-
-    sha256_hash = hashlib.sha256()
-
-    for password in wordlistArr:
-
-        currentpassword = password.encode()
-
-        sha256_hash.update(currentpassword)
-
-        currentpassword = sha256_hash.hexigest()
-
-        hashwordlistArr.append(currentpassword)
+        #print(passworD)
+        
 
 
+        # password[0] => username, password[1] => hashed password
 
-    crackedpasswords = []
+        username = []
 
-    tempstr = ''
+        username.append(passworD[0])
 
-    for user in wordlistArr:
+        passWord = []
 
-        for letter in user:
+        passWord.append(passworD[1])
 
-            tempstr += letter
+        currentpassword = []
 
-            if letter == ':':
-                crackedpasswords.append(tempstr)
-                tempstr = ''
-                print(crackedpasswords)
-                break
-    
+        for wordlist in wordlistfile.readlines():
+
+            #wordlistArr.append(word.strip())
+            currentpassword = wordlist.encode()
+            
+            sha256_hash = hashlib.sha256()
+
+            sha256_hash.update(currentpassword)
+
+            currentPassword = sha256_hash.hexdigest()
+
+            currentpassword.append(currentPassword)
+
+        if currentpassword == password[1]:
+            print(username, passWord)
+
+        
+
+            # hashwordlistArr.append(currentpassword)
+
+            
+             #   print(password)
+
 if __name__ == "__main__":
-    main()
+                    main()
